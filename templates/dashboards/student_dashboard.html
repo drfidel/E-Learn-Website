@@ -1,0 +1,11 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<h2>Student Dashboard</h2>
+<ul class="list-group">
+  {% for enrollment in enrollments %}
+  <li class="list-group-item d-flex justify-content-between">
+    {{ enrollment.course.title }} <span class="badge bg-success">Enrolled</span>
+  </li>
+  {% empty %}<li class="list-group-item">No enrollments yet.</li>{% endfor %}
+</ul>
+{% endblock %}

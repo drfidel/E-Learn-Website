@@ -1,0 +1,9 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<h2>Instructor Dashboard</h2>
+<div class="row">
+  <div class="col-md-4"><div class="card p-3">Students: {{ total_students }}</div></div>
+  <div class="col-md-4"><div class="card p-3">Earnings: ${{ earnings }}</div></div>
+  <div class="col-md-4"><div class="card p-3">Courses: {{ courses.count }}</div></div>
+</div>
+{% endblock %}

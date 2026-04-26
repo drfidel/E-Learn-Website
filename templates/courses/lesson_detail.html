@@ -1,0 +1,7 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<h2>{{ lesson.title }}</h2>
+{% if lesson.content_type == 'video' %}<div class="ratio ratio-16x9"><iframe src="{{ lesson.video_url }}"></iframe></div>{% endif %}
+{% if lesson.content_type == 'text' %}<p>{{ lesson.text_content }}</p>{% endif %}
+{% if lesson.file %}<a href="{{ lesson.file.url }}" class="btn btn-outline-secondary">Download file</a>{% endif %}
+{% endblock %}

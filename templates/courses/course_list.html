@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Courses</h2>
+  <form class="d-flex" method="get">
+    <input name="q" class="form-control me-2" placeholder="Search course">
+    <select name="pricing" class="form-select me-2">
+      <option value="">All</option><option value="free">Free</option><option value="paid">Paid</option>
+    </select>
+    <button class="btn btn-outline-secondary">Filter</button>
+  </form>
+</div>
+<div class="row mt-3">
+{% for course in courses %}
+  <div class="col-md-4">
+    <div class="card mb-3"><div class="card-body">
+      <h5>{{ course.title }}</h5>
+      <p>{{ course.description|truncatechars:80 }}</p>
+      <p><strong>${{ course.price }}</strong> • {{ course.students }} students</p>
+      <a href="/courses/{{ course.id }}/" class="btn btn-primary btn-sm">View</a>
+    </div></div>
+  </div>
+{% empty %}<p>No courses available.</p>{% endfor %}
+</div>
+{% endblock %}
