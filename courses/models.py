@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+import uuid
 
 
 class Category(models.Model):
@@ -44,3 +45,17 @@ class Progress(models.Model):
 
     class Meta:
         unique_together = ('enrollment', 'lesson')
+
+
+class Certificate(models.Model):
+    enrollment = models.OneToOneField(Enrollment, on_delete=models.CASCADE, related_name='certificate')
+    certificate_id = models.CharField(max_length=36, unique=True, editable=False)
+    issued_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.certificate_id:
+            self.certificate_id = str(uuid.uuid4()).upper()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Certificate {self.certificate_id} - {self.enrollment.student.email}'

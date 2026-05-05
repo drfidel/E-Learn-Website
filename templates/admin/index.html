@@ -1,0 +1,108 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<section class="admin-dashboard-grid">
+  <article class="admin-hero-card">
+    <p class="admin-kicker">Snapshot</p>
+    <h2>Platform at a Glance</h2>
+    <p class="admin-hero-copy">Track growth and learning quality in one place. Use the analytics workspace for deeper trends and comparisons.</p>
+    <a class="admin-cta" href="{% url 'admin:analytics' %}">Open Analytics Workspace</a>
+  </article>
+
+  <article class="admin-metric-card">
+    <p>Total Users</p>
+    <h3>{{ admin_metrics.total_users }}</h3>
+    <span>{{ admin_metrics.total_students }} students · {{ admin_metrics.total_instructors }} instructors</span>
+  </article>
+
+  <article class="admin-metric-card">
+    <p>Course Inventory</p>
+    <h3>{{ admin_metrics.total_courses }}</h3>
+    <span>{{ admin_metrics.published_courses }} published · {{ admin_metrics.draft_courses }} drafts</span>
+  </article>
+
+  <article class="admin-metric-card">
+    <p>Revenue</p>
+    <h3>${{ admin_metrics.total_revenue|floatformat:2 }}</h3>
+    <span class="{% if admin_metrics.revenue_growth >= 0 %}trend-up{% else %}trend-down{% endif %}">
+      {{ admin_metrics.revenue_growth }}% vs previous {{ window_days }} days
+    </span>
+  </article>
+
+  <article class="admin-metric-card">
+    <p>Enrollments</p>
+    <h3>{{ admin_metrics.total_enrollments }}</h3>
+    <span class="{% if admin_metrics.enrollment_growth >= 0 %}trend-up{% else %}trend-down{% endif %}">
+      {{ admin_metrics.enrollment_growth }}% vs previous {{ window_days }} days
+    </span>
+  </article>
+
+  <article class="admin-metric-card">
+    <p>Learning Completion</p>
+    <h3>{{ admin_metrics.completion_rate }}%</h3>
+    <span>{{ admin_metrics.successful_payments }} successful payments · {{ admin_metrics.average_rating }}/5 avg rating</span>
+  </article>
+</section>
+
+<section class="admin-trends-grid">
+  <article class="admin-panel">
+    <header>
+      <h3>Enrollment Trend ({{ window_days }} Days)</h3>
+    </header>
+    <div class="chart-canvas" id="enrollment-chart"></div>
+  </article>
+  <article class="admin-panel">
+    <header>
+      <h3>Revenue Trend ({{ window_days }} Days)</h3>
+    </header>
+    <div class="chart-canvas" id="revenue-chart"></div>
+  </article>
+</section>
+
+<section class="admin-panel">
+  <header>
+    <h3>Top Performing Courses</h3>
+  </header>
+  <div class="admin-table-wrap">
+    <table class="admin-performance-table">
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Instructor</th>
+          <th>Students</th>
+          <th>Revenue</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in top_courses %}
+        <tr>
+          <td>{{ course.title }}</td>
+          <td>{{ course.instructor.email }}</td>
+          <td>{{ course.enrollments_total }}</td>
+          <td>${{ course.revenue_total|floatformat:2 }}</td>
+          <td>{% if course.avg_rating %}{{ course.avg_rating|floatformat:1 }}/5{% else %}-{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5">No course performance data yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{{ admin_series.enrollments|json_script:"admin-enrollment-series" }}
+{{ admin_series.revenue|json_script:"admin-revenue-series" }}
+
+<section class="admin-panel admin-apps-panel">
+  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+</section>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script defer src="{% static 'js/admin-dashboard.js' %}"></script>
+{% endblock %}

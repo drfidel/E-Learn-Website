@@ -1,11 +1,52 @@
 {% extends 'base/base.html' %}
 {% block content %}
-<h2>Student Dashboard</h2>
-<ul class="list-group">
-  {% for enrollment in enrollments %}
-  <li class="list-group-item d-flex justify-content-between">
-    {{ enrollment.course.title }} <span class="badge bg-success">Enrolled</span>
-  </li>
-  {% empty %}<li class="list-group-item">No enrollments yet.</li>{% endfor %}
-</ul>
+<section class="dashboard-panel mb-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div>
+      <h2 class="mb-1">Student Dashboard</h2>
+      <p class="text-muted mb-0">Track your enrolled courses and continue learning.</p>
+    </div>
+    <a href="/" class="btn btn-outline-primary">Browse More Courses</a>
+  </div>
+</section>
+
+<section class="dashboard-panel">
+  <h3 class="h5 mb-3">My Enrollments</h3>
+  <ul class="list-group">
+    {% for row in enrollment_rows %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <div class="fw-semibold">{{ row.enrollment.course.title }}</div>
+        <small class="text-muted">Joined {{ row.enrollment.created_at|date:"M d, Y" }}</small>
+        <div class="small text-muted mt-1">{{ row.completed_lessons }}/{{ row.total_lessons }} lessons completed</div>
+        <div class="progress mt-2" style="height: 8px; max-width: 260px;">
+          <div class="progress-bar" role="progressbar" style="width: {{ row.progress_percent }}%;" aria-valuenow="{{ row.progress_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        {% if row.is_completed %}
+        <div class="small mt-2 text-success fw-semibold">Course completed. Certificate available.</div>
+        {% endif %}
+      </div>
+      <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-primary" href="/courses/{{ row.enrollment.course.id }}/">Continue</a>
+        {% if row.certificate %}
+        <a class="btn btn-sm btn-outline-success" href="{% url 'courses:view_certificate' row.certificate.certificate_id %}">View Certificate</a>
+        {% elif row.is_completed %}
+        <form method="post" action="{% url 'courses:issue_certificate' row.enrollment.id %}">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-success" type="submit">Claim Certificate</button>
+        </form>
+        {% endif %}
+      </div>
+    </li>
+    {% empty %}
+    <li class="list-group-item">
+      <div class="empty-state">
+        <h6>No enrollments yet</h6>
+        <p class="text-muted mb-2">Start by exploring the course catalog.</p>
+        <a href="/" class="btn btn-sm btn-primary">Find Courses</a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
 {% endblock %}

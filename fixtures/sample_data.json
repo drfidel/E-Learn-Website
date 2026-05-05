@@ -41,5 +41,861 @@
       "is_published": true,
       "created_at": "2026-01-02T00:00:00Z"
     }
+  },
+  {
+    "model": "courses.course",
+    "pk": 2,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Advanced Django Patterns",
+      "description": "Master reusable app architecture and scalable Django patterns.",
+      "thumbnail": "",
+      "price": "49.99",
+      "is_published": true,
+      "created_at": "2026-01-03T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 3,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "REST APIs with DRF",
+      "description": "Build production-ready APIs using Django REST Framework.",
+      "thumbnail": "",
+      "price": "39.99",
+      "is_published": true,
+      "created_at": "2026-01-04T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 4,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Full-Stack Django + Bootstrap",
+      "description": "Create complete web apps with Django backend and Bootstrap UI.",
+      "thumbnail": "",
+      "price": "29.99",
+      "is_published": true,
+      "created_at": "2026-01-05T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 5,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Django Authentication Deep Dive",
+      "description": "Implement secure auth, permissions, and role-based access.",
+      "thumbnail": "",
+      "price": "34.99",
+      "is_published": true,
+      "created_at": "2026-01-06T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 6,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Database Design for Web Apps",
+      "description": "Design robust relational schemas and optimize queries.",
+      "thumbnail": "",
+      "price": "24.99",
+      "is_published": true,
+      "created_at": "2026-01-07T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 7,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Modern Python for Web Developers",
+      "description": "Use modern Python features to write clean backend code.",
+      "thumbnail": "",
+      "price": "19.99",
+      "is_published": true,
+      "created_at": "2026-01-08T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 8,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Testing Django Applications",
+      "description": "Write unit, integration, and API tests for confidence.",
+      "thumbnail": "",
+      "price": "27.99",
+      "is_published": true,
+      "created_at": "2026-01-09T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 9,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Deployment with Docker and Nginx",
+      "description": "Containerize, serve, and deploy Django in production.",
+      "thumbnail": "",
+      "price": "44.99",
+      "is_published": true,
+      "created_at": "2026-01-10T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 10,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Asynchronous Tasks with Celery",
+      "description": "Handle background jobs and scheduled tasks in Django.",
+      "thumbnail": "",
+      "price": "31.99",
+      "is_published": true,
+      "created_at": "2026-01-11T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 11,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Payment Integration Essentials",
+      "description": "Implement secure checkout and payment verification flows.",
+      "thumbnail": "",
+      "price": "36.99",
+      "is_published": true,
+      "created_at": "2026-01-12T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 12,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Build an LMS with Django",
+      "description": "Create a learning platform with enrollments and progress.",
+      "thumbnail": "",
+      "price": "59.99",
+      "is_published": true,
+      "created_at": "2026-01-13T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 13,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Django Admin Customization",
+      "description": "Customize the admin interface for better workflows.",
+      "thumbnail": "",
+      "price": "22.99",
+      "is_published": true,
+      "created_at": "2026-01-14T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 14,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Security Best Practices for Django",
+      "description": "Protect your app from common web vulnerabilities.",
+      "thumbnail": "",
+      "price": "42.99",
+      "is_published": true,
+      "created_at": "2026-01-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 15,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "GraphQL APIs with Python",
+      "description": "Design flexible APIs using GraphQL and Python tooling.",
+      "thumbnail": "",
+      "price": "33.99",
+      "is_published": true,
+      "created_at": "2026-01-16T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 16,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Performance Tuning for Django Apps",
+      "description": "Improve speed with profiling, caching, and DB optimizations.",
+      "thumbnail": "",
+      "price": "46.99",
+      "is_published": true,
+      "created_at": "2026-01-17T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 17,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "CI/CD for Python Projects",
+      "description": "Automate testing and deployments with modern pipelines.",
+      "thumbnail": "",
+      "price": "28.99",
+      "is_published": true,
+      "created_at": "2026-01-18T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 18,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Multi-Tenant SaaS with Django",
+      "description": "Architect tenant-aware applications for SaaS platforms.",
+      "thumbnail": "",
+      "price": "54.99",
+      "is_published": true,
+      "created_at": "2026-01-19T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 19,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Real-Time Features with WebSockets",
+      "description": "Add chat and live updates using Django Channels.",
+      "thumbnail": "",
+      "price": "37.99",
+      "is_published": true,
+      "created_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 20,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Practical API Versioning",
+      "description": "Version APIs cleanly while supporting existing clients.",
+      "thumbnail": "",
+      "price": "21.99",
+      "is_published": true,
+      "created_at": "2026-01-21T00:00:00Z"
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": 21,
+    "fields": {
+      "instructor": 1,
+      "category": 1,
+      "title": "Capstone: Build a Production LMS",
+      "description": "Ship a complete LMS project with best-practice architecture.",
+      "thumbnail": "",
+      "price": "79.99",
+      "is_published": true,
+      "created_at": "2026-01-22T00:00:00Z"
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "title": "Getting Started with Django",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "title": "Models, Views, and Templates",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 3,
+    "fields": {
+      "course": 2,
+      "title": "Advanced Project Architecture",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 4,
+    "fields": {
+      "course": 2,
+      "title": "Reusable Apps and Services",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 5,
+    "fields": {
+      "course": 3,
+      "title": "API Fundamentals",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 6,
+    "fields": {
+      "course": 3,
+      "title": "Authentication and Permissions",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 7,
+    "fields": {
+      "course": 4,
+      "title": "Frontend + Backend Integration",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 8,
+    "fields": {
+      "course": 4,
+      "title": "Project Build Sprint",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 9,
+    "fields": {
+      "course": 8,
+      "title": "Testing Foundations",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 10,
+    "fields": {
+      "course": 8,
+      "title": "API and Integration Tests",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 11,
+    "fields": {
+      "course": 12,
+      "title": "LMS Domain Modeling",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.module",
+    "pk": 12,
+    "fields": {
+      "course": 12,
+      "title": "Enrollment, Progress, and Certificates",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 1,
+    "fields": {
+      "module": 1,
+      "title": "Setting Up the Environment",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/rHux0gMZ3Eg",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 2,
+    "fields": {
+      "module": 1,
+      "title": "Your First Django Project",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Create your first project and run the development server.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 3,
+    "fields": {
+      "module": 1,
+      "title": "Command Reference Sheet",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 4,
+    "fields": {
+      "module": 2,
+      "title": "Designing Models for a Blog",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/c708Nf0cHrs",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 5,
+    "fields": {
+      "module": 2,
+      "title": "Function-Based vs Class-Based Views",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Compare patterns and when to use each view style.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 6,
+    "fields": {
+      "module": 2,
+      "title": "Template Inheritance Cheatsheet",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 7,
+    "fields": {
+      "module": 3,
+      "title": "Layered Architecture for Large Projects",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/6gLeplbqtqg",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 8,
+    "fields": {
+      "module": 3,
+      "title": "Separating Business Logic",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Move core logic into services to keep views and serializers thin.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 9,
+    "fields": {
+      "module": 3,
+      "title": "Architecture Decision Template",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 10,
+    "fields": {
+      "module": 4,
+      "title": "Packaging Reusable Apps",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/Mf4Se4ZGcG8",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 11,
+    "fields": {
+      "module": 4,
+      "title": "Signals, Tasks, and Event Flows",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Build event-driven workflows without tightly coupling components.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 12,
+    "fields": {
+      "module": 4,
+      "title": "App Boilerplate Files",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 13,
+    "fields": {
+      "module": 5,
+      "title": "DRF Serializer Basics",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/5l2KWxjWnSk",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 14,
+    "fields": {
+      "module": 5,
+      "title": "Designing RESTful Endpoints",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Plan predictable URL patterns and HTTP method semantics.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 15,
+    "fields": {
+      "module": 5,
+      "title": "API Response Standards",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 16,
+    "fields": {
+      "module": 6,
+      "title": "JWT Authentication Setup",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/2jwV8I4G5YI",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 17,
+    "fields": {
+      "module": 6,
+      "title": "Role-Based Access Policies",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Apply object-level permissions and role checks for secure APIs.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 18,
+    "fields": {
+      "module": 6,
+      "title": "Permission Matrix Worksheet",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 19,
+    "fields": {
+      "module": 7,
+      "title": "Rendering Dynamic Templates",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/4M6JHfV7RzA",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 20,
+    "fields": {
+      "module": 7,
+      "title": "Form Handling and Validation UX",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Build robust forms with clean validation and user-friendly feedback.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 21,
+    "fields": {
+      "module": 7,
+      "title": "Frontend Components Starter",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 22,
+    "fields": {
+      "module": 8,
+      "title": "Building the Course Catalog",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/2d7U7H7bM3M",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 23,
+    "fields": {
+      "module": 8,
+      "title": "Checkout and Enrollment Flow",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Implement enrollment flow and redirect users through payment outcomes.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 24,
+    "fields": {
+      "module": 8,
+      "title": "Capstone Requirements",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 25,
+    "fields": {
+      "module": 9,
+      "title": "Unit Testing Models and Views",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/I4F9Q4VdB5M",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 26,
+    "fields": {
+      "module": 9,
+      "title": "Test Data Factories",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Create reusable test fixtures and isolate behavior in each test.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 27,
+    "fields": {
+      "module": 9,
+      "title": "Testing Checklist",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 28,
+    "fields": {
+      "module": 10,
+      "title": "API Contract Tests",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/6tNS--WetLI",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 29,
+    "fields": {
+      "module": 10,
+      "title": "End-to-End Workflow Testing",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Test login, enrollment, and progress tracking in integrated flows.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 30,
+    "fields": {
+      "module": 10,
+      "title": "CI Test Pipeline Example",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 31,
+    "fields": {
+      "module": 11,
+      "title": "Modeling Users, Courses, and Lessons",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/3M5fQxGxq4I",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 32,
+    "fields": {
+      "module": 11,
+      "title": "Designing Instructor and Student Roles",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Define permissions and dashboards for each role in an LMS.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 33,
+    "fields": {
+      "module": 11,
+      "title": "Domain Modeling Diagram",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 34,
+    "fields": {
+      "module": 12,
+      "title": "Implementing Enrollment Logic",
+      "content_type": "video",
+      "video_url": "https://www.youtube.com/embed/3x7f5Nw3yxQ",
+      "text_content": "",
+      "file": "",
+      "order": 1
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 35,
+    "fields": {
+      "module": 12,
+      "title": "Tracking Lesson Completion and Progress",
+      "content_type": "text",
+      "video_url": "",
+      "text_content": "Calculate course completion and expose progress analytics in UI.",
+      "file": "",
+      "order": 2
+    }
+  },
+  {
+    "model": "lessons.lesson",
+    "pk": 36,
+    "fields": {
+      "module": 12,
+      "title": "Certificate Verification Spec",
+      "content_type": "file",
+      "video_url": "",
+      "text_content": "",
+      "file": "",
+      "order": 3
+    }
   }
 ]

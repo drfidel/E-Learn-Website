@@ -1,25 +1,141 @@
 {% extends 'base/base.html' %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-center">
-  <h2>Courses</h2>
-  <form class="d-flex" method="get">
-    <input name="q" class="form-control me-2" placeholder="Search course">
-    <select name="pricing" class="form-select me-2">
-      <option value="">All</option><option value="free">Free</option><option value="paid">Paid</option>
-    </select>
-    <button class="btn btn-outline-secondary">Filter</button>
-  </form>
-</div>
-<div class="row mt-3">
-{% for course in courses %}
-  <div class="col-md-4">
-    <div class="card mb-3"><div class="card-body">
-      <h5>{{ course.title }}</h5>
-      <p>{{ course.description|truncatechars:80 }}</p>
-      <p><strong>${{ course.price }}</strong> • {{ course.students }} students</p>
-      <a href="/courses/{{ course.id }}/" class="btn btn-primary btn-sm">View</a>
-    </div></div>
+<section class="home-hero mb-4">
+  <div class="home-hero-content">
+    <p class="eyebrow mb-2">Learn Without Limits</p>
+    <h1 class="display-6 fw-bold mb-2">Skills That Move Your Career Forward</h1>
+    <p class="mb-3">Start, switch, or advance your career with expert-led courses in tech, business, and creative fields.</p>
+    <form class="row g-2" method="get">
+      <div class="col-md-6">
+        <input name="q" value="{{ request.GET.q|default:'' }}" class="form-control form-control-lg" placeholder="What do you want to learn today?">
+      </div>
+      <div class="col-md-3">
+        <select name="pricing" class="form-select form-select-lg">
+          <option value="" {% if not request.GET.pricing %}selected{% endif %}>All pricing</option>
+          <option value="free" {% if request.GET.pricing == 'free' %}selected{% endif %}>Free</option>
+          <option value="paid" {% if request.GET.pricing == 'paid' %}selected{% endif %}>Paid</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-dark btn-lg w-100">Search Courses</button>
+      </div>
+    </form>
+    <div class="mt-3 d-flex flex-wrap gap-2">
+      <a class="chip-link" href="?q=python">Python</a>
+      <a class="chip-link" href="?q=web development">Web Development</a>
+      <a class="chip-link" href="?q=data science">Data Science</a>
+      <a class="chip-link" href="?q=digital marketing">Digital Marketing</a>
+    </div>
   </div>
-{% empty %}<p>No courses available.</p>{% endfor %}
-</div>
+  <aside class="hero-panel">
+    <h5 class="mb-2">Why Learn Here?</h5>
+    <ul class="mb-0">
+      <li>Structured paths: Course → Module → Lesson</li>
+      <li>Hands-on quizzes and lesson tracking</li>
+      <li>Instructor-led content with ratings</li>
+      <li>Flexible learning at your own pace</li>
+    </ul>
+  </aside>
+</section>
+
+<section class="trust-strip mb-4">
+  <div><strong>10K+</strong><span>Learners</span></div>
+  <div><strong>500+</strong><span>Lessons</span></div>
+  <div><strong>120+</strong><span>Courses</span></div>
+  <div><strong>40+</strong><span>Instructors</span></div>
+</section>
+
+<section class="dashboard-panel mb-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+    <h2 class="h4 mb-0">Featured Courses</h2>
+    {% if user.is_authenticated and user.role == 'instructor' %}
+    <a href="/courses/create/" class="btn btn-outline-dark btn-sm">Create a Course</a>
+    {% else %}
+    <a href="/accounts/register/" class="btn btn-outline-dark btn-sm">Join as Learner</a>
+    {% endif %}
+  </div>
+  <div class="row">
+    {% for course in courses %}
+    <div class="col-md-4">
+      <div class="card mb-3 h-100 shadow-sm border-0 home-course-card">
+        {% if course.thumbnail %}
+        <img src="{{ course.thumbnail.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 180px; object-fit: cover;">
+        {% else %}
+        <div class="course-placeholder">
+          <span class="placeholder-chip">{{ course.category|default:"General" }}</span>
+          <h6>{{ course.title|truncatechars:34 }}</h6>
+        </div>
+        {% endif %}
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+            <h5 class="mb-0">{{ course.title }}</h5>
+            {% if course.price == 0 %}
+            <span class="badge text-bg-success">Free</span>
+            {% else %}
+            <span class="badge text-bg-dark">${{ course.price }}</span>
+            {% endif %}
+          </div>
+          <p class="text-muted small mb-2">{{ course.description|truncatechars:95 }}</p>
+          <div class="course-meta mb-2">
+            <span><strong>{{ course.students }}</strong> students</span>
+            <span><span class="text-warning">★</span> {{ course.avg_rating|default:"New" }}</span>
+          </div>
+          <p class="small text-muted mt-auto mb-2">{{ course.category|default:"Uncategorized" }}</p>
+          <a href="/courses/{{ course.id }}/" class="btn btn-primary btn-sm">View Course</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="empty-state">
+        <h5>No courses found</h5>
+        <p class="text-muted mb-0">Try another search term or check back soon for new learning content.</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+<nav class="mt-4" aria-label="Courses pagination">
+  <ul class="pagination pagination-modern justify-content-center mb-0">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?q={{ request.GET.q|urlencode }}&pricing={{ request.GET.pricing|urlencode }}&page={{ page_obj.previous_page_number }}">Previous</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+      <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+      {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+      <li class="page-item">
+        <a class="page-link" href="?q={{ request.GET.q|urlencode }}&pricing={{ request.GET.pricing|urlencode }}&page={{ num }}">{{ num }}</a>
+      </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?q={{ request.GET.q|urlencode }}&pricing={{ request.GET.pricing|urlencode }}&page={{ page_obj.next_page_number }}">Next</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+<section class="home-cta">
+  <div>
+    <h3 class="h5 mb-1">Become an Instructor</h3>
+    <p class="mb-0">Share your expertise and publish courses for thousands of learners.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="/accounts/register/" class="btn btn-light">Start Teaching</a>
+    <a href="/courses/dashboard/instructor/" class="btn btn-outline-light">Instructor Dashboard</a>
+  </div>
+</section>
 {% endblock %}

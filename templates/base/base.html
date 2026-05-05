@@ -1,24 +1,148 @@
 <!doctype html>
 <html lang="en">
 <head>
+  {% load static %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>E-Learning Platform</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg site-navbar sticky-top">
   <div class="container">
-    <a class="navbar-brand" href="/">E-Learn</a>
-    <div>
+    <a class="navbar-brand site-brand" href="/">
+      <span class="brand-mark">E</span>
+      <span>E-Learn</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNavbar" aria-controls="siteNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="siteNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/">Courses</a></li>
+        {% if user.is_authenticated and user.role == 'admin' %}
+        <li class="nav-item"><a class="nav-link" href="/courses/dashboard/admin/">Admin</a></li>
+        {% elif user.is_authenticated and user.role == 'instructor' %}
+        <li class="nav-item"><a class="nav-link" href="/courses/dashboard/instructor/">Instructor</a></li>
+        {% elif user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="/courses/dashboard/student/">My Learning</a></li>
+        {% endif %}
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+      <button id="themeToggle" class="btn btn-outline-secondary btn-sm" type="button" aria-label="Toggle dark mode">Dark</button>
       {% if user.is_authenticated %}
       <a class="btn btn-outline-primary btn-sm" href="/accounts/profile/">Profile</a>
+      <div class="dropdown">
+        <button class="btn btn-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ user.username }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><span class="dropdown-item-text text-muted small">{{ user.role|title }}</span></li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <form action="/accounts/logout/" method="post" class="px-3 py-1">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm w-100">Logout</button>
+            </form>
+          </li>
+        </ul>
+      </div>
       {% else %}
+      <a class="btn btn-outline-secondary btn-sm" href="/accounts/register/">Register</a>
       <a class="btn btn-primary btn-sm" href="/accounts/login/">Login</a>
       {% endif %}
+      </div>
     </div>
   </div>
 </nav>
-<div class="container py-4">{% block content %}{% endblock %}</div>
+<div class="container py-4">
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+  {% endif %}
+  {% block content %}{% endblock %}
+</div>
+<footer class="site-footer mt-4">
+  <div class="container py-4">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h5 class="mb-2">E-Learn</h5>
+        <p class="mb-2 text-muted">Practical online learning for students, professionals, and teams.</p>
+        <p class="mb-0 small text-muted">Email: support@elearn.local</p>
+      </div>
+      <div class="col-md-2">
+        <h6>Learn</h6>
+        <ul class="list-unstyled mb-0">
+          <li><a href="/">Browse Courses</a></li>
+          <li><a href="/courses/dashboard/student/">My Learning</a></li>
+          <li><a href="/accounts/register/">Register</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+        <h6>Teach</h6>
+        <ul class="list-unstyled mb-0">
+          <li><a href="/courses/create/">Create Course</a></li>
+          <li><a href="/courses/dashboard/instructor/">Instructor Dashboard</a></li>
+          <li><a href="/accounts/profile/">Instructor Profile</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+        <h6>Company</h6>
+        <ul class="list-unstyled mb-0">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Help Center</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+        <h6>Legal</h6>
+        <ul class="list-unstyled mb-0">
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="my-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 small text-muted">
+      <span>© {% now "Y" %} E-Learn. All rights reserved.</span>
+      <div class="d-flex gap-3">
+        <a href="#">X</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">YouTube</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  (function () {
+    const storageKey = 'theme';
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem(storageKey);
+    const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (systemDark ? 'dark' : 'light');
+
+    root.setAttribute('data-theme', theme);
+    if (toggle) {
+      toggle.textContent = theme === 'dark' ? 'Light' : 'Dark';
+      toggle.addEventListener('click', function () {
+        const current = root.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem(storageKey, next);
+        toggle.textContent = next === 'dark' ? 'Light' : 'Dark';
+      });
+    }
+  })();
+</script>
 </body>
 </html>

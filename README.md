@@ -34,8 +34,10 @@ A full-stack e-learning platform with role-based learning workflows for **Admins
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate or source .venv/Scripts/activate or .venv\Scripts\activate
 pip install -r requirements.txt
+
+python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py loaddata fixtures/sample_data.json
@@ -78,6 +80,20 @@ On successful verification, users are auto-enrolled.
 
 ```bash
 python manage.py test
+```
+
+## psycopg2 Install Error Fix
+
+If you see:
+
+`If you prefer to avoid building psycopg2 from source, please install the PyPI 'psycopg2-binary' package instead.`
+
+Run:
+
+```bash
+pip uninstall -y psycopg2 psycopg2-binary
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt --no-cache-dir
 ```
 
 ## Optional Enhancements

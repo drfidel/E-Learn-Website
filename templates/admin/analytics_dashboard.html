@@ -1,0 +1,91 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; Analytics
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard-grid">
+  <article class="admin-metric-card">
+    <p>Pending Instructor Approvals</p>
+    <h3>{{ admin_metrics.pending_instructors }}</h3>
+    <span>Review and approve educators waiting to publish courses.</span>
+  </article>
+  <article class="admin-metric-card">
+    <p>Average Course Rating</p>
+    <h3>{{ admin_metrics.average_rating }}/5</h3>
+    <span>Based on learner reviews across all published courses.</span>
+  </article>
+  <article class="admin-metric-card">
+    <p>Successful Payments</p>
+    <h3>{{ admin_metrics.successful_payments }}</h3>
+    <span>Completed transactions across all providers.</span>
+  </article>
+  <article class="admin-metric-card">
+    <p>Completion Rate</p>
+    <h3>{{ admin_metrics.completion_rate }}%</h3>
+    <span>Completed lesson progress records across enrollments.</span>
+  </article>
+</section>
+
+<section class="admin-trends-grid">
+  <article class="admin-panel">
+    <header>
+      <h3>Enrollment Activity ({{ window_days }} Days)</h3>
+    </header>
+    <div class="chart-canvas" id="enrollment-chart"></div>
+  </article>
+  <article class="admin-panel">
+    <header>
+      <h3>Revenue Activity ({{ window_days }} Days)</h3>
+    </header>
+    <div class="chart-canvas" id="revenue-chart"></div>
+  </article>
+</section>
+
+<section class="admin-panel">
+  <header>
+    <h3>Top Courses by Student Volume</h3>
+  </header>
+  <div class="admin-table-wrap">
+    <table class="admin-performance-table">
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Category</th>
+          <th>Students</th>
+          <th>Revenue</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in top_courses %}
+        <tr>
+          <td>{{ course.title }}</td>
+          <td>{{ course.category|default:"Uncategorized" }}</td>
+          <td>{{ course.enrollments_total }}</td>
+          <td>${{ course.revenue_total|floatformat:2 }}</td>
+          <td>{% if course.avg_rating %}{{ course.avg_rating|floatformat:1 }}/5{% else %}-{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5">No course performance data yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{{ admin_series.enrollments|json_script:"admin-enrollment-series" }}
+{{ admin_series.revenue|json_script:"admin-revenue-series" }}
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script defer src="{% static 'js/admin-dashboard.js' %}"></script>
+{% endblock %}
