@@ -36,6 +36,10 @@ def course_list(request):
     return render(request, 'courses/course_list.html', {'courses': page_obj.object_list, 'page_obj': page_obj})
 
 
+def about(request):
+    return render(request, 'courses/about.html')
+
+
 def course_detail(request, pk):
     course = get_object_or_404(
         Course.objects.select_related('instructor', 'category').prefetch_related('modules__lessons'),
