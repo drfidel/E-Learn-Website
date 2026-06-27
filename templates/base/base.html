@@ -23,12 +23,16 @@
         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="/">Courses</a></li>
         <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
-        {% if user.is_authenticated and user.role == 'admin' %}
-        <li class="nav-item"><a class="nav-link" href="/courses/dashboard/admin/">Admin</a></li>
-        {% elif user.is_authenticated and user.role == 'instructor' %}
-        <li class="nav-item"><a class="nav-link" href="/courses/dashboard/instructor/">Instructor</a></li>
-        {% elif user.is_authenticated %}
-        <li class="nav-item"><a class="nav-link" href="/courses/dashboard/student/">My Learning</a></li>
+        {% if user.is_authenticated %}
+          {% if is_admin %}
+            <li class="nav-item"><a class="nav-link" href="/courses/dashboard/admin/">Admin</a></li>
+          {% elif is_instructor %}
+            <li class="nav-item"><a class="nav-link" href="/courses/dashboard/instructor/">Instructor</a></li>
+          {% elif is_student %}
+            <li class="nav-item"><a class="nav-link" href="/courses/dashboard/student/">My Learning</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="/courses/dashboard/student/">My Learning</a></li>
+          {% endif %}
         {% endif %}
       </ul>
 
@@ -59,7 +63,16 @@
     </div>
   </div>
 </nav>
-<div class="container py-4">
+  <div id="cookieConsent" class="cookie-consent" style="display:none;">
+    <div class="cookie-consent-content">
+      <p class="mb-2">We use cookies to improve your experience. By continuing, you agree to our <a href="/cookies/">Cookies Policy</a>.</p>
+      <div class="d-flex gap-2">
+        <button id="acceptCookies" class="btn btn-primary btn-sm">Accept</button>
+        <button id="declineCookies" class="btn btn-outline-secondary btn-sm">Decline</button>
+      </div>
+    </div>
+  </div>
+  <div class="container py-4">
   {% if messages %}
     {% for message in messages %}
     <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
@@ -86,6 +99,7 @@
           <li><a href="/accounts/register/">Register</a></li>
         </ul>
       </div>
+      {% if is_instructor %}
       <div class="col-md-2">
         <h6>Teach</h6>
         <ul class="list-unstyled mb-0">
@@ -94,6 +108,7 @@
           <li><a href="/accounts/profile/">Instructor Profile</a></li>
         </ul>
       </div>
+      {% endif %}
       <div class="col-md-2">
         <h6>Company</h6>
         <ul class="list-unstyled mb-0">
@@ -107,7 +122,7 @@
         <ul class="list-unstyled mb-0">
           <li><a href="#">Terms</a></li>
           <li><a href="#">Privacy</a></li>
-          <li><a href="#">Cookies</a></li>
+          <li><a href="/cookies/">Cookies</a></li>
         </ul>
       </div>
     </div>
@@ -143,6 +158,22 @@
         toggle.textContent = next === 'dark' ? 'Light' : 'Dark';
       });
     }
+  })();
+
+  (function () {
+    var consent = localStorage.getItem('cookie_consent');
+    var banner = document.getElementById('cookieConsent');
+    if (!consent && banner) {
+      banner.style.display = 'block';
+    }
+    document.getElementById('acceptCookies')?.addEventListener('click', function () {
+      localStorage.setItem('cookie_consent', 'accepted');
+      banner.style.display = 'none';
+    });
+    document.getElementById('declineCookies')?.addEventListener('click', function () {
+      localStorage.setItem('cookie_consent', 'declined');
+      banner.style.display = 'none';
+    });
   })();
 </script>
 </body>

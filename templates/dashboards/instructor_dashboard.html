@@ -84,6 +84,7 @@
         <div class="d-flex gap-2 mt-3">
           <a href="{% url 'course_detail' course.id %}" class="btn btn-outline-primary btn-sm">View</a>
           <a href="{% url 'courses:course_create' %}" class="btn btn-outline-dark btn-sm">New Course</a>
+          <a href="{% url 'reviews:manage_reviews' course.id %}" class="btn btn-outline-secondary btn-sm">Manage Reviews</a>
         </div>
       </div>
     </article>

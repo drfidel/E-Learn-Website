@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import User
 from .forms import CourseForm
-from .models import Certificate, Course, Enrollment, Progress
+from .models import Certificate, Course, Enrollment, Progress, Wishlist
 from payments.models import Payment
 from reviews.models import Review
 
@@ -33,11 +33,47 @@ def course_list(request):
     paginator = Paginator(courses, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'courses/course_list.html', {'courses': page_obj.object_list, 'page_obj': page_obj})
+    wishlisted_ids = []
+    if request.user.is_authenticated:
+        wishlisted_ids = list(Wishlist.objects.filter(user=request.user, course__in=page_obj.object_list).values_list('course_id', flat=True))
+
+    return render(request, 'courses/course_list.html', {'courses': page_obj.object_list, 'page_obj': page_obj, 'wishlisted_ids': wishlisted_ids})
+
+
+@login_required
+def toggle_wishlist(request, course_id):
+    if request.method != 'POST':
+        return redirect('courses:course_list')
+
+    course = get_object_or_404(Course, pk=course_id)
+    existing = Wishlist.objects.filter(user=request.user, course=course).first()
+    if existing:
+        existing.delete()
+        messages.info(request, f'"{course.title}" removed from your wishlist.')
+    else:
+        Wishlist.objects.create(user=request.user, course=course)
+        messages.success(request, f'"{course.title}" added to your wishlist.')
+
+    return redirect(request.META.get('HTTP_REFERER', 'courses:course_list'))
+
+
+@login_required
+def wishlist_list(request):
+    courses = (
+        Course.objects.filter(wishlisted_by__user=request.user)
+        .select_related('category', 'instructor')
+        .annotate(students=Count('enrollments'), avg_rating=Avg('reviews__rating'))
+        .order_by('-wishlisted_by__created_at')
+    )
+    return render(request, 'courses/wishlist.html', {'courses': courses})
 
 
 def about(request):
     return render(request, 'courses/about.html')
+
+
+def cookies(request):
+    return render(request, 'courses/cookies.html')
 
 
 def course_detail(request, pk):
@@ -80,6 +116,13 @@ def course_detail(request, pk):
             }
         )
     can_access_lessons = bool(enrollment) or can_manage_structure
+    
+    # Fetch reviews and user's rating
+    reviews = course.reviews.select_related('student').order_by('-created_at')
+    user_review = None
+    if request.user.is_authenticated:
+        user_review = course.reviews.filter(student=request.user).first()
+    
     return render(
         request,
         'courses/course_detail.html',
@@ -93,12 +136,18 @@ def course_detail(request, pk):
             'completed_lessons': completed_lessons,
             'progress_percent': progress_percent,
             'modules_data': modules_data,
+            'reviews': reviews,
+            'user_review': user_review,
         },
     )
 
 
 @login_required
 def instructor_dashboard(request):
+    if not (request.user.role == User.Role.INSTRUCTOR or request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'You are not authorized to access the instructor dashboard.')
+        return redirect('home')
+
     query = request.GET.get('q', '').strip()
     status = request.GET.get('status', 'all')
 
@@ -160,7 +209,13 @@ def student_dashboard(request):
                 'certificate': certificate,
             }
         )
-    return render(request, 'dashboards/student_dashboard.html', {'enrollment_rows': enrollment_rows})
+    wishlist_preview = (
+        Course.objects.filter(wishlisted_by__user=request.user)
+        .select_related('category')
+        .annotate(students=Count('enrollments'), avg_rating=Avg('reviews__rating'))
+        .order_by('-wishlisted_by__created_at')[:4]
+    )
+    return render(request, 'dashboards/student_dashboard.html', {'enrollment_rows': enrollment_rows, 'wishlist_preview': wishlist_preview})
 
 
 @login_required
@@ -288,6 +343,9 @@ def admin_dashboard(request):
 
 @login_required
 def course_create(request):
+    if not (request.user.role == User.Role.INSTRUCTOR or request.user.is_staff or request.user.is_superuser):
+        messages.error(request, 'Only instructors can create courses.')
+        return redirect('home')
     form = CourseForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
         course = form.save(commit=False)

@@ -118,15 +118,99 @@
 
     {% if user.is_authenticated and enrollment %}
     <section class="dashboard-panel">
-      <h5 class="mb-3">Leave a Review</h5>
+      <h5 class="mb-3">{% if user_review %}Update{% else %}Leave{% endif %} a Review</h5>
       <form method="post" action="/reviews/add/{{ course.id }}/">
         {% csrf_token %}
-        <input class="form-control mb-2" type="number" min="1" max="5" name="rating" placeholder="Rating (1-5)">
-        <textarea class="form-control mb-2" name="comment" placeholder="What did you like most?"></textarea>
-        <button class="btn btn-outline-primary w-100">Submit Review</button>
+        <div class="mb-3">
+          <label class="form-label">Your Rating</label>
+          <div class="star-rating" id="starRating">
+            {% for i in "12345" %}
+            <span class="star" data-value="{{ i }}" data-selected="{% if user_review and user_review.rating == i|add:0 %}true{% else %}false{% endif %}">★</span>
+            {% endfor %}
+          </div>
+          <input type="hidden" name="rating" id="ratingValue" value="{% if user_review %}{{ user_review.rating }}{% else %}5{% endif %}">
+          <small class="text-muted">Click stars to rate</small>
+        </div>
+        <textarea class="form-control mb-2" name="comment" placeholder="What did you like most?">{% if user_review %}{{ user_review.comment }}{% endif %}</textarea>
+        <button class="btn btn-outline-primary w-100">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
       </form>
+    </section>
+    
+    <section class="dashboard-panel">
+      <h5 class="mb-3">Reviews ({{ reviews.count }})</h5>
+      {% if reviews %}
+      <div class="reviews-list">
+        {% for review in reviews %}
+        <div class="review-card mb-3 pb-3 border-bottom">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <div class="fw-semibold">{{ review.student.username }}</div>
+              <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+            </div>
+            <div class="rating-stars">
+              {% for i in "12345" %}
+                {% if i|add:0 <= review.rating %}<span class="text-warning">★</span>{% else %}<span class="text-muted">☆</span>{% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% if review.comment %}
+          <p class="mb-0 text-muted">{{ review.comment }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-muted mb-0">No reviews yet. Be the first to review!</p>
+      {% endif %}
     </section>
     {% endif %}
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const starRating = document.getElementById('starRating');
+  if (starRating) {
+    const stars = starRating.querySelectorAll('.star');
+    const ratingValue = document.getElementById('ratingValue');
+    
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        const value = this.dataset.value;
+        ratingValue.value = value;
+        
+        stars.forEach(s => {
+          const val = parseInt(s.dataset.value);
+          if (val <= value) {
+            s.dataset.selected = 'true';
+          } else {
+            s.dataset.selected = 'false';
+          }
+        });
+      });
+      
+      star.addEventListener('mouseenter', function() {
+        const value = this.dataset.value;
+        stars.forEach(s => {
+          if (parseInt(s.dataset.value) <= value) {
+            s.style.color = '#fbbf24';
+          } else {
+            s.style.color = '#d1d5db';
+          }
+        });
+      });
+    });
+    
+    starRating.addEventListener('mouseleave', function() {
+      stars.forEach(star => {
+        if (star.dataset.selected === 'true') {
+          star.style.color = '#fbbf24';
+        } else {
+          star.style.color = '#d1d5db';
+        }
+      });
+    });
+  }
+});
+</script>
 {% endblock %}
