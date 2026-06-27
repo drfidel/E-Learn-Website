@@ -54,11 +54,29 @@ Then open `http://localhost`.
 
 ## API Endpoints
 
+- `POST /api/auth/register/` – register a user
+- `GET|PUT /api/auth/me/` – view or update the authenticated profile
 - `POST /api/token/` – obtain JWT token
 - `POST /api/token/refresh/` – refresh JWT token
+- `GET|POST /api/categories/`
 - `GET|POST /api/courses/`
 - `GET|PUT|DELETE /api/courses/<id>/`
 - `POST /api/courses/<id>/enroll/`
+- `GET|POST /api/modules/`
+- `GET|PUT|DELETE /api/modules/<id>/`
+- `GET|POST /api/lessons/`
+- `GET|PUT|DELETE /api/lessons/<id>/`
+- `POST /api/lessons/<id>/progress/` – mark a lesson complete/incomplete
+- `GET|POST /api/quizzes/`
+- `GET|PUT|DELETE /api/quizzes/<id>/`
+- `GET|POST /api/questions/`
+- `GET|PUT|DELETE /api/questions/<id>/`
+- `GET /api/enrollments/`
+- `GET|POST /api/progress/`
+- `GET /api/certificates/`
+- `POST /api/certificates/issue/<enrollment_id>/`
+- `GET /api/certificates/verify/<certificate_id>/`
+- `GET|POST /api/payments/`
 - `GET|POST /api/reviews/`
 
 ## Payment Notes
