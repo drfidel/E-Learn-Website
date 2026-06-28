@@ -1,0 +1,123 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="admin-hero mb-4">
+  <div>
+    <p class="eyebrow mb-2">Admin Control Center</p>
+    <h1 class="h3 mb-2">Platform Dashboard</h1>
+    <p class="text-muted mb-0">Monitor growth, review learning activity, and manage courses from one place.</p>
+  </div>
+  <a href="{% url 'courses:course_create' %}" class="btn btn-dark">+ Add Course</a>
+</section>
+
+<section class="stats-grid mb-4">
+  <article class="metric-card"><p class="metric-label">Users</p><p class="metric-value">{{ total_users }}</p></article>
+  <article class="metric-card"><p class="metric-label">Students</p><p class="metric-value">{{ total_students }}</p></article>
+  <article class="metric-card"><p class="metric-label">Instructors</p><p class="metric-value">{{ total_instructors }}</p></article>
+  <article class="metric-card"><p class="metric-label">Total Courses</p><p class="metric-value">{{ total_courses }}</p></article>
+  <article class="metric-card"><p class="metric-label">Published</p><p class="metric-value">{{ published_courses }}</p></article>
+  <article class="metric-card"><p class="metric-label">Drafts</p><p class="metric-value">{{ draft_courses }}</p></article>
+  <article class="metric-card"><p class="metric-label">Enrollments</p><p class="metric-value">{{ total_enrollments }}</p></article>
+  <article class="metric-card"><p class="metric-label">Revenue</p><p class="metric-value">${{ total_revenue }}</p></article>
+</section>
+
+<section class="dashboard-panel mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 mb-0">Quality Snapshot</h2>
+    <span class="badge text-bg-info">Avg Rating: {{ average_rating|floatformat:1 }}/5</span>
+  </div>
+  <p class="mb-0 text-muted">Successful Payments: <strong>{{ successful_payments }}</strong></p>
+</section>
+
+<section class="dashboard-panel mb-4">
+  <form method="get" class="row g-3 align-items-end">
+    <div class="col-md-7">
+      <label for="q" class="form-label">Search Courses</label>
+      <input id="q" name="q" value="{{ query }}" type="text" class="form-control" placeholder="Search by title, description, or instructor email">
+    </div>
+    <div class="col-md-3">
+      <label for="status" class="form-label">Status</label>
+      <select id="status" name="status" class="form-select">
+        <option value="all" {% if status == 'all' %}selected{% endif %}>All</option>
+        <option value="published" {% if status == 'published' %}selected{% endif %}>Published</option>
+        <option value="draft" {% if status == 'draft' %}selected{% endif %}>Draft</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" type="submit">Apply</button>
+    </div>
+  </form>
+</section>
+
+<section class="dashboard-panel">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 mb-0">Course Management</h2>
+    <small class="text-muted">{{ courses|length }} showing</small>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle admin-table">
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Instructor</th>
+          <th>Category</th>
+          <th>Students</th>
+          <th>Rating</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+        <tr>
+          <td>
+            <div class="fw-semibold">{{ course.title }}</div>
+            <small class="text-muted">{% if course.price == 0 %}Free{% else %}${{ course.price }}{% endif %}</small>
+          </td>
+          <td>{{ course.instructor.email }}</td>
+          <td>{{ course.category|default:"Uncategorized" }}</td>
+          <td>{{ course.students_count }}</td>
+          <td>{% if course.avg_rating %}{{ course.avg_rating|floatformat:1 }} / 5{% else %}-{% endif %}</td>
+          <td>
+            {% if course.is_published %}
+            <span class="badge text-bg-success">Published</span>
+            {% else %}
+            <span class="badge text-bg-secondary">Draft</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="d-flex gap-2">
+              <a href="{% url 'course_detail' course.id %}" class="btn btn-outline-primary btn-sm">View</a>
+              {% if course.is_published %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course.id }}">
+                <input type="hidden" name="action" value="unpublish">
+                <button type="submit" class="btn btn-outline-warning btn-sm">Unpublish</button>
+              </form>
+              {% else %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course.id }}">
+                <input type="hidden" name="action" value="publish">
+                <button type="submit" class="btn btn-outline-success btn-sm">Publish</button>
+              </form>
+              {% endif %}
+              <form method="post" onsubmit="return confirm('Delete this course permanently?');">
+                {% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course.id }}">
+                <input type="hidden" name="action" value="delete">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center text-muted py-4">No courses found for your current filters.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

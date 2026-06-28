@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="dashboard-panel">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="mb-1">{{ lesson.title }}</h2>
+      <p class="text-muted mb-0">{{ lesson.module.course.title }} · {{ lesson.module.title }}</p>
+    </div>
+    <a href="/courses/{{ lesson.module.course.id }}/" class="btn btn-outline-secondary btn-sm">Back to Course</a>
+  </div>
+
+  {% if enrollment %}
+  <form method="post" action="{% url 'lessons:toggle_progress' lesson.id %}" class="mb-3">
+    {% csrf_token %}
+    {% if progress_record and progress_record.completed %}
+    <input type="hidden" name="completed" value="0">
+    <button type="submit" class="btn btn-outline-warning btn-sm">Mark as Incomplete</button>
+    <span class="ms-2 badge text-bg-success">Completed</span>
+    {% else %}
+    <input type="hidden" name="completed" value="1">
+    <button type="submit" class="btn btn-success btn-sm">Mark as Complete</button>
+    {% endif %}
+  </form>
+  {% endif %}
+
+  {% if lesson.content_type == 'video' %}
+  <div class="ratio ratio-16x9">
+    <iframe src="{{ lesson.video_url }}" allowfullscreen></iframe>
+  </div>
+  {% elif lesson.content_type == 'text' %}
+  <article class="p-3 rounded border bg-light">{{ lesson.text_content|linebreaks }}</article>
+  {% elif lesson.file %}
+  <p class="text-muted">Download the lesson resource below.</p>
+  <a href="{{ lesson.file.url }}" class="btn btn-primary">Download File</a>
+  {% else %}
+  <div class="empty-state">
+    <h6>Lesson content is not available yet</h6>
+    <p class="text-muted mb-0">The instructor may still be preparing this lesson.</p>
+  </div>
+  {% endif %}
+</section>
+
+<section class="dashboard-panel mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="h5 mb-0">Quiz</h3>
+    {% if can_manage_structure %}
+      {% if lesson.quiz %}
+      <a href="{% url 'lessons:question_create' lesson.quiz.id %}" class="btn btn-outline-primary btn-sm">+ Add Question</a>
+      {% else %}
+      <a href="{% url 'lessons:quiz_create' lesson.id %}" class="btn btn-outline-dark btn-sm">+ Create Quiz</a>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  {% if lesson.quiz %}
+  <div class="mb-3">
+    <h4 class="h6 mb-1">{{ lesson.quiz.title }}</h4>
+    <p class="text-muted mb-0">Pass mark: {{ lesson.quiz.pass_mark }}%</p>
+  </div>
+  <ol class="mb-0">
+    {% for question in lesson.quiz.questions.all %}
+    <li class="mb-3">
+      <p class="mb-2 fw-semibold">{{ question.text }}</p>
+      <ul class="mb-0">
+        <li>A. {{ question.option_a }}</li>
+        <li>B. {{ question.option_b }}</li>
+        <li>C. {{ question.option_c }}</li>
+        <li>D. {{ question.option_d }}</li>
+      </ul>
+    </li>
+    {% empty %}
+    <p class="text-muted mb-0">No questions yet.</p>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <div class="empty-state">
+    <h6>No quiz attached to this lesson</h6>
+    <p class="text-muted mb-0">Instructors can add a quiz and questions here.</p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

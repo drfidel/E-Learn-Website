@@ -1,0 +1,86 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="course-create-hero mb-4">
+  <div>
+    <p class="eyebrow mb-2">Instructor Studio</p>
+    <h2 class="mb-1">Create a New Course</h2>
+    <p class="mb-0">Set up your course details professionally. You can add modules and lessons right after saving.</p>
+  </div>
+  <a href="/courses/dashboard/instructor/" class="btn btn-outline-light">Back to Dashboard</a>
+</section>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <section class="dashboard-panel">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h5 class="mb-3">Core Details</h5>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.title.id_for_label }}">Course title</label>
+          {{ form.title }}
+          <div class="form-text">Use a clear title that communicates the main outcome.</div>
+          {% if form.title.errors %}<div class="text-danger small">{{ form.title.errors|striptags }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.category.id_for_label }}">Category</label>
+          {{ form.category }}
+          {% if form.category.errors %}<div class="text-danger small">{{ form.category.errors|striptags }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.description.id_for_label }}">Description</label>
+          {{ form.description }}
+          <div class="form-text">Highlight objectives, prerequisites, and what learners will build.</div>
+          {% if form.description.errors %}<div class="text-danger small">{{ form.description.errors|striptags }}</div>{% endif %}
+        </div>
+
+        <h5 class="mb-3 mt-4">Pricing & Visibility</h5>
+        <div class="row g-3 align-items-end">
+          <div class="col-md-5">
+            <label class="form-label" for="{{ form.price.id_for_label }}">Price (USD)</label>
+            {{ form.price }}
+            <div class="form-text">Set `0` for a free course.</div>
+            {% if form.price.errors %}<div class="text-danger small">{{ form.price.errors|striptags }}</div>{% endif %}
+          </div>
+          <div class="col-md-7">
+            <div class="form-check form-switch mt-2">
+              {{ form.is_published }}
+              <label class="form-check-label ms-2" for="{{ form.is_published.id_for_label }}">Publish course immediately</label>
+            </div>
+            {% if form.is_published.errors %}<div class="text-danger small">{{ form.is_published.errors|striptags }}</div>{% endif %}
+          </div>
+        </div>
+
+        <h5 class="mb-3 mt-4">Thumbnail</h5>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.thumbnail.id_for_label }}">Course cover image</label>
+          {{ form.thumbnail }}
+          <div class="form-text">Recommended: landscape image, high quality, clear subject focus.</div>
+          {% if form.thumbnail.errors %}<div class="text-danger small">{{ form.thumbnail.errors|striptags }}</div>{% endif %}
+        </div>
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors|striptags }}</div>
+        {% endif %}
+
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <button class="btn btn-success" type="submit">Save Course</button>
+          <a href="/courses/dashboard/instructor/" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="col-lg-4">
+    <section class="dashboard-panel">
+      <h5 class="mb-3">Publishing Tips</h5>
+      <ul class="mb-0 course-create-tips">
+        <li>Use a specific title with practical outcomes.</li>
+        <li>Keep description learner-focused and results-driven.</li>
+        <li>Add a compelling thumbnail for higher click-through.</li>
+        <li>Start as draft if you still need modules/lessons.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | E-Learn Admin{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin-theme.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div class="admin-branding">
+  <h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+      E-Learn Control Room
+    </a>
+  </h1>
+  <p class="admin-branding-subtitle">Operational intelligence for courses, learners, and revenue.</p>
+</div>
+{% endblock %}
+
+{% block nav-global %}
+<div class="admin-nav-global">
+  <a href="{% url 'admin:index' %}" class="admin-nav-pill">Overview</a>
+  <a href="{% url 'admin:analytics' %}" class="admin-nav-pill">Analytics</a>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="certificate-wrap">
+  <div class="certificate-card">
+    <p class="eyebrow mb-2">Certificate of Completion</p>
+    <h1 class="h3 mb-3">E-Learn Achievement Certificate</h1>
+    <p class="mb-1">This certifies that</p>
+    <h2 class="h4 mb-3">{{ certificate.enrollment.student.get_full_name|default:certificate.enrollment.student.username }}</h2>
+    <p class="mb-1">has successfully completed the course</p>
+    <h3 class="h5 mb-3">{{ certificate.enrollment.course.title }}</h3>
+    <p class="mb-1">Instructor: {{ certificate.enrollment.course.instructor.get_full_name|default:certificate.enrollment.course.instructor.username }}</p>
+    <p class="mb-1">Issued on: {{ certificate.issued_at|date:"F d, Y" }}</p>
+    <p class="mb-3">Certificate ID: <strong>{{ certificate.certificate_id }}</strong></p>
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+      <a href="{% url 'courses:verify_certificate' certificate.certificate_id %}" class="btn btn-outline-primary btn-sm">Verify Certificate</a>
+      <button class="btn btn-dark btn-sm" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+</section>
+{% endblock %}

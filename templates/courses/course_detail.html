@@ -1,0 +1,216 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="course-hero mb-4">
+  <div>
+    <p class="eyebrow mb-2">Course Detail</p>
+    <h1 class="h3 mb-2">{{ course.title }}</h1>
+    <p class="mb-3">{{ course.description }}</p>
+    <div class="d-flex flex-wrap gap-2">
+      <span class="badge text-bg-light">Instructor: {{ course.instructor.username }}</span>
+      <span class="badge text-bg-light">{{ course.category|default:"Uncategorized" }}</span>
+      {% if course.price == 0 %}
+      <span class="badge text-bg-success">Free Course</span>
+      {% else %}
+      <span class="badge text-bg-warning">${{ course.price }}</span>
+      {% endif %}
+    </div>
+  </div>
+  <aside class="course-hero-cta">
+    {% if user.is_authenticated %}
+      {% if enrollment %}
+      <span class="badge text-bg-success mb-2">You are enrolled</span>
+      <div class="course-progress-card mb-2">
+        <div class="d-flex justify-content-between small mb-1">
+          <span>Course progress</span>
+          <span>{{ progress_percent }}%</span>
+        </div>
+        <div class="progress" style="height: 8px;">
+          <div class="progress-bar" role="progressbar" style="width: {{ progress_percent }}%;" aria-valuenow="{{ progress_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="small mt-1">{{ completed_lessons }}/{{ total_lessons }} lessons completed</div>
+      </div>
+      <a class="btn btn-light w-100 mb-2" href="/courses/dashboard/student/">Go to My Learning</a>
+      {% else %}
+      <form method="post" action="{% url 'courses:enroll_course' course.id %}">
+        {% csrf_token %}
+        <button class="btn btn-light w-100" type="submit">{% if course.price == 0 %}Enroll Now{% else %}Enroll / Buy{% endif %}</button>
+      </form>
+      {% endif %}
+    {% else %}
+    <a class="btn btn-light w-100 mb-2" href="/accounts/login/">Login to Enroll</a>
+    <a class="btn btn-outline-light w-100" href="/accounts/register/">Create Account</a>
+    {% endif %}
+  </aside>
+</section>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <section class="dashboard-panel">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Course Curriculum</h4>
+        {% if can_manage_structure %}
+        <a class="btn btn-sm btn-dark" href="{% url 'lessons:module_create' course.id %}">+ Add Module</a>
+        {% endif %}
+      </div>
+
+      {% if modules_data %}
+        {% for item in modules_data %}
+        {% with module=item.module %}
+        <article class="module-block">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <h5 class="mb-0">{{ module.order }}. {{ module.title }}</h5>
+              {% if enrollment %}
+              <small class="text-muted">Progress: {{ item.done }}/{{ item.total }} lessons</small>
+              {% endif %}
+            </div>
+            {% if can_manage_structure %}
+            <a class="btn btn-outline-secondary btn-sm" href="{% url 'lessons:lesson_create' module.id %}">+ Add Lesson</a>
+            {% endif %}
+          </div>
+          {% if enrollment %}
+          <div class="progress mb-2" style="height: 6px;">
+            <div class="progress-bar" role="progressbar" style="width: {{ item.percent }}%;"></div>
+          </div>
+          {% endif %}
+          {% if module.lessons.all %}
+          <ul class="list-group list-group-flush">
+            {% for lesson in module.lessons.all %}
+            <li class="list-group-item lesson-row">
+              <div class="d-flex align-items-center gap-2">
+                <span class="lesson-index">{{ lesson.order }}</span>
+                <div>
+                  <div class="fw-semibold">{{ lesson.title }}</div>
+                  <small class="text-muted text-uppercase">{{ lesson.content_type }}</small>
+                </div>
+                {% if lesson.id in completed_lesson_ids %}
+                <span class="badge text-bg-success ms-2">Completed</span>
+                {% endif %}
+              </div>
+              {% if can_access_lessons %}
+              <a class="btn btn-sm btn-outline-primary" href="{% url 'lessons:detail' lesson.id %}">Open</a>
+              {% else %}
+              <span class="badge text-bg-secondary">Locked</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted mb-0">No lessons added yet.</p>
+          {% endif %}
+        </article>
+        {% endwith %}
+        {% endfor %}
+      {% else %}
+      <div class="empty-state">No modules added yet for this course.</div>
+      {% endif %}
+    </section>
+  </div>
+
+  <div class="col-lg-4">
+    <section class="dashboard-panel mb-3">
+      <h5 class="mb-3">Course Snapshot</h5>
+      <div class="snapshot-row"><span>Price</span><strong>{% if course.price == 0 %}Free{% else %}${{ course.price }}{% endif %}</strong></div>
+      <div class="snapshot-row"><span>Modules</span><strong>{{ course.modules.count }}</strong></div>
+      <div class="snapshot-row"><span>Level</span><strong>All Levels</strong></div>
+      <div class="snapshot-row"><span>Certificate</span><strong>Yes</strong></div>
+    </section>
+
+    {% if user.is_authenticated and enrollment %}
+    <section class="dashboard-panel">
+      <h5 class="mb-3">{% if user_review %}Update{% else %}Leave{% endif %} a Review</h5>
+      <form method="post" action="/reviews/add/{{ course.id }}/">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Your Rating</label>
+          <div class="star-rating" id="starRating">
+            {% for i in "12345" %}
+            <span class="star" data-value="{{ i }}" data-selected="{% if user_review and user_review.rating == i|add:0 %}true{% else %}false{% endif %}">★</span>
+            {% endfor %}
+          </div>
+          <input type="hidden" name="rating" id="ratingValue" value="{% if user_review %}{{ user_review.rating }}{% else %}5{% endif %}">
+          <small class="text-muted">Click stars to rate</small>
+        </div>
+        <textarea class="form-control mb-2" name="comment" placeholder="What did you like most?">{% if user_review %}{{ user_review.comment }}{% endif %}</textarea>
+        <button class="btn btn-outline-primary w-100">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
+      </form>
+    </section>
+    
+    <section class="dashboard-panel">
+      <h5 class="mb-3">Reviews ({{ reviews.count }})</h5>
+      {% if reviews %}
+      <div class="reviews-list">
+        {% for review in reviews %}
+        <div class="review-card mb-3 pb-3 border-bottom">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <div class="fw-semibold">{{ review.student.username }}</div>
+              <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+            </div>
+            <div class="rating-stars">
+              {% for i in "12345" %}
+                {% if i|add:0 <= review.rating %}<span class="text-warning">★</span>{% else %}<span class="text-muted">☆</span>{% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% if review.comment %}
+          <p class="mb-0 text-muted">{{ review.comment }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-muted mb-0">No reviews yet. Be the first to review!</p>
+      {% endif %}
+    </section>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const starRating = document.getElementById('starRating');
+  if (starRating) {
+    const stars = starRating.querySelectorAll('.star');
+    const ratingValue = document.getElementById('ratingValue');
+    
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        const value = this.dataset.value;
+        ratingValue.value = value;
+        
+        stars.forEach(s => {
+          const val = parseInt(s.dataset.value);
+          if (val <= value) {
+            s.dataset.selected = 'true';
+          } else {
+            s.dataset.selected = 'false';
+          }
+        });
+      });
+      
+      star.addEventListener('mouseenter', function() {
+        const value = this.dataset.value;
+        stars.forEach(s => {
+          if (parseInt(s.dataset.value) <= value) {
+            s.style.color = '#fbbf24';
+          } else {
+            s.style.color = '#d1d5db';
+          }
+        });
+      });
+    });
+    
+    starRating.addEventListener('mouseleave', function() {
+      stars.forEach(star => {
+        if (star.dataset.selected === 'true') {
+          star.style.color = '#fbbf24';
+        } else {
+          star.style.color = '#d1d5db';
+        }
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

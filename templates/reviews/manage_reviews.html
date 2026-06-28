@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="dashboard-panel">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 mb-0">Manage Reviews - {{ course.title }}</h2>
+    <a href="{% url 'courses:instructor_dashboard' %}" class="btn btn-outline-dark btn-sm">Back</a>
+  </div>
+  {% if reviews %}
+  <ul class="list-group">
+    {% for review in reviews %}
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div>
+        <div class="fw-semibold">{{ review.student.username }} <small class="text-muted">• {{ review.created_at|date:"M d, Y" }}</small></div>
+        <div class="rating-stars small mt-1">{% for i in "12345" %}{% if i|add:0 <= review.rating %}<span class="text-warning">★</span>{% else %}<span class="text-muted">☆</span>{% endif %}{% endfor %}</div>
+        {% if review.comment %}<p class="mb-0 text-muted">{{ review.comment }}</p>{% endif %}
+      </div>
+      <div>
+        <form method="post" action="{% url 'reviews:delete_review' review.id %}">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty-state">No reviews yet for this course.</div>
+  {% endif %}
+</section>
+{% endblock %}

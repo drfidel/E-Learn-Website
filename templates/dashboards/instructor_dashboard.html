@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="instructor-hero mb-4">
+  <div>
+    <p class="eyebrow mb-2">Instructor Workspace</p>
+    <h1 class="h3 mb-2">Course Management Dashboard</h1>
+    <p class="text-muted mb-0">Track performance, manage publishing state, and jump into content operations quickly.</p>
+  </div>
+  <a href="{% url 'courses:course_create' %}" class="btn btn-dark">+ Create New Course</a>
+</section>
+
+<section class="stats-grid mb-4">
+  <article class="metric-card">
+    <p class="metric-label">Total Students</p>
+    <p class="metric-value">{{ total_students }}</p>
+  </article>
+  <article class="metric-card">
+    <p class="metric-label">Total Revenue</p>
+    <p class="metric-value">${{ earnings }}</p>
+  </article>
+  <article class="metric-card">
+    <p class="metric-label">Published</p>
+    <p class="metric-value">{{ published_courses }}</p>
+  </article>
+  <article class="metric-card">
+    <p class="metric-label">Drafts</p>
+    <p class="metric-value">{{ draft_courses }}</p>
+  </article>
+</section>
+
+<section class="dashboard-panel mb-4">
+  <form method="get" class="row g-3 align-items-end">
+    <div class="col-md-7">
+      <label for="q" class="form-label">Search Courses</label>
+      <input id="q" name="q" value="{{ query }}" type="text" class="form-control" placeholder="Search by title or description">
+    </div>
+    <div class="col-md-3">
+      <label for="status" class="form-label">Status</label>
+      <select id="status" name="status" class="form-select">
+        <option value="all" {% if status == 'all' %}selected{% endif %}>All</option>
+        <option value="published" {% if status == 'published' %}selected{% endif %}>Published</option>
+        <option value="draft" {% if status == 'draft' %}selected{% endif %}>Draft</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" type="submit">Apply</button>
+    </div>
+  </form>
+</section>
+
+<section class="dashboard-panel">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 mb-0">Your Courses</h2>
+    <small class="text-muted">{{ total_courses }} total</small>
+  </div>
+
+  {% if courses %}
+  <div class="course-grid">
+    {% for course in courses %}
+    <article class="course-card">
+      {% if course.thumbnail %}
+      <img class="course-thumb" src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+      {% else %}
+      <div class="course-thumb course-thumb-fallback">{{ course.title|slice:":1"|upper }}</div>
+      {% endif %}
+      <div class="course-content">
+        <div class="d-flex justify-content-between align-items-start gap-2">
+          <h3 class="h6 mb-1">{{ course.title }}</h3>
+          {% if course.is_published %}
+          <span class="badge text-bg-success">Published</span>
+          {% else %}
+          <span class="badge text-bg-secondary">Draft</span>
+          {% endif %}
+        </div>
+        <p class="small text-muted mb-2">{{ course.description|truncatechars:110 }}</p>
+        <div class="meta-row">
+          <span>{{ course.category|default:"Uncategorized" }}</span>
+          <span>{% if course.price == 0 %}Free{% else %}${{ course.price }}{% endif %}</span>
+        </div>
+        <div class="meta-row">
+          <span>{{ course.students_count }} students</span>
+          <span>{% if course.avg_rating %}{{ course.avg_rating|floatformat:1 }} / 5{% else %}No ratings yet{% endif %}</span>
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <a href="{% url 'course_detail' course.id %}" class="btn btn-outline-primary btn-sm">View</a>
+          <a href="{% url 'courses:course_create' %}" class="btn btn-outline-dark btn-sm">New Course</a>
+          <a href="{% url 'reviews:manage_reviews' course.id %}" class="btn btn-outline-secondary btn-sm">Manage Reviews</a>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3 class="h6">No courses match your filters</h3>
+    <p class="text-muted mb-3">Try a different search/status or create a new course.</p>
+    <a href="{% url 'courses:course_create' %}" class="btn btn-dark btn-sm">Create Course</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<section class="profile-hero mb-4">
+  <div>
+    <p class="eyebrow mb-2">Account</p>
+    <h2 class="mb-1">My Profile</h2>
+    <p class="mb-0">Build a strong learning and teaching identity with complete profile details.</p>
+  </div>
+  <div class="profile-badge">{{ request.user.role|title }}</div>
+</section>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <section class="dashboard-panel">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h5 class="mb-3">Identity</h5>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.first_name.id_for_label }}">First name</label>
+            {{ form.first_name }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.last_name.id_for_label }}">Last name</label>
+            {{ form.last_name }}
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="{{ form.headline.id_for_label }}">Professional headline</label>
+            {{ form.headline }}
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="{{ form.photo.id_for_label }}">Profile photo</label>
+            {{ form.photo }}
+          </div>
+        </div>
+
+        <h5 class="mb-3">Contact & Location</h5>
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.phone_number.id_for_label }}">Phone number</label>
+            {{ form.phone_number }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="{{ form.country.id_for_label }}">Country</label>
+            {{ form.country }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="{{ form.city.id_for_label }}">City</label>
+            {{ form.city }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.website.id_for_label }}">Website</label>
+            {{ form.website }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="{{ form.linkedin_url.id_for_label }}">LinkedIn</label>
+            {{ form.linkedin_url }}
+          </div>
+        </div>
+
+        <h5 class="mb-3">About</h5>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.bio.id_for_label }}">Bio</label>
+          {{ form.bio }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.learning_goals.id_for_label }}">Learning goals</label>
+          {{ form.learning_goals }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="{{ form.qualifications.id_for_label }}">Qualifications</label>
+          {{ form.qualifications }}
+        </div>
+
+        {% for field in form %}
+          {% if field.errors %}
+          <div class="text-danger small mb-2">{{ field.label }}: {{ field.errors|striptags }}</div>
+          {% endif %}
+        {% endfor %}
+
+        <button class="btn btn-primary" type="submit">Save Profile</button>
+      </form>
+    </section>
+  </div>
+
+  <div class="col-lg-4">
+    <section class="dashboard-panel">
+      <h5 class="mb-3">Profile Summary</h5>
+      <div class="summary-item"><span>Email</span><strong>{{ request.user.email }}</strong></div>
+      <div class="summary-item"><span>Username</span><strong>{{ request.user.username }}</strong></div>
+      <div class="summary-item"><span>Role</span><strong>{{ request.user.role|title }}</strong></div>
+      <div class="summary-item"><span>Status</span><strong>{% if request.user.is_active %}Active{% else %}Inactive{% endif %}</strong></div>
+    </section>
+  </div>
+</div>
+{% endblock %}
